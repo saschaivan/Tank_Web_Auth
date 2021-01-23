@@ -6,7 +6,7 @@ name := "play-silhouette-seed"
 
 version := "6.0.0"
 
-scalaVersion := "2.13.1"
+scalaVersion := "2.12.4"
 
 resolvers += Resolver.jcenterRepo
 
@@ -25,7 +25,7 @@ libraryDependencies ++= Seq(
   "com.iheart" %% "ficus" % "1.4.7",
   "com.typesafe.play" %% "play-mailer" % "7.0.1",
   "com.typesafe.play" %% "play-mailer-guice" % "7.0.1",
-//"com.enragedginger" %% "akka-quartz-scheduler" % "1.8.2-akka-2.6.x",
+  //"com.enragedginger" %% "akka-quartz-scheduler" % "1.8.2-akka-2.6.x",
   "com.enragedginger" %% "akka-quartz-scheduler" % "1.8.3-akka-2.6.x",
   "com.adrianhurt" %% "play-bootstrap" % "1.5.1-P27-B4",
   "com.mohiva" %% "play-silhouette-testkit" % "6.1.1" % "test",
@@ -35,7 +35,25 @@ libraryDependencies ++= Seq(
   filters
 )
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val `tank_web_auth` = (project in file(".")).enablePlugins(PlayScala)
+
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala).settings(
+  name := """Tank_Web_Auth""",
+  version := "1.0-SNAPSHOT",
+  scalaVersion := "2.12.4",
+  libraryDependencies ++= Seq(
+    guice,
+    "com.h2database" % "h2" % "1.4.199",
+    "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test,
+    "de.htwg.se" %% "tank" % "0.0.1"
+  ),
+  scalacOptions ++= Seq(
+    "-feature",
+    "-deprecation",
+    "-Xfatal-warnings"
+  )
+)
 
 routesImport += "utils.route.Binders._"
 

@@ -32,6 +32,38 @@ POST        /password/change                 controllers.ChangePasswordControlle
 GET         /account/email/:email            controllers.ActivateAccountController.send(email: String)
 GET         /account/activate/:token         controllers.ActivateAccountController.activate(token: java.util.UUID)
 
+GET         /                                controllers.TankController.menu
+
+GET         /game                            controllers.TankController.tank
+
+GET         /about                           controllers.TankController.about
+
+GET         /controls                        controllers.TankController.controls
+
+GET         /game/A                          controllers.TankController.moveLeft
+
+GET         /game/D                          controllers.TankController.moveRight
+
+GET         /game/P                          controllers.TankController.changePlayer
+
+GET         /game/R                          controllers.TankController.redo
+
+GET         /game/U                          controllers.TankController.undo
+
+GET         /game/+                          controllers.TankController.PowerPlus
+
+GET         /game/-                          controllers.TankController.PowerMinus
+
+GET         /game/json                       controllers.TankController.gameToJson
+
+GET         /game/websocket                  controllers.TankController.socket
+
+GET         /game/mapcoordinates             controllers.TankController.sendMapCoordinates()
+
+GET         /game/posupdate                  controllers.TankController.sendPosUpdate()
+
+#GET        /game/:player1/:player2/:map     controllers.TankController.setGame(player1, player2, map)
+
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                    controllers.Assets.versioned(file)
+GET         /assets/*file                    controllers.Assets.versioned(path="/public", file: Asset)
 ->          /webjars                         webjars.Routes
