@@ -81,9 +81,8 @@
                     }
                 }
                 case None => {
-                    <h2>@messages("totp.disabled.title")</h2>
-                    <a href="@controllers.routes.TotpController.enableTotp">
-                        <input type="button" class="btn btn-primary" value='@messages("totp.enable")'/>
+                     <a href="/menu">
+                        <input type="button" class="btn btn-primary" value='Start'/>
                     </a>
                 }
             }

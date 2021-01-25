@@ -1,0 +1,8 @@
+{
+  "name": "Tank_Web_Auth",
+  "version": "1.0.0",
+  "dependencies": {},
+  "devDependencies": {
+    "register-service-worker": "^1.7.2"
+  }
+}

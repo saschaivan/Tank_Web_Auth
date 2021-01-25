@@ -32,7 +32,7 @@ POST        /password/change                 controllers.ChangePasswordControlle
 GET         /account/email/:email            controllers.ActivateAccountController.send(email: String)
 GET         /account/activate/:token         controllers.ActivateAccountController.activate(token: java.util.UUID)
 
-GET         /                                controllers.TankController.menu
+GET         /menu                            controllers.TankController.menu
 
 GET         /game                            controllers.TankController.tank
 
@@ -63,6 +63,8 @@ GET         /game/mapcoordinates             controllers.TankController.sendMapC
 GET         /game/posupdate                  controllers.TankController.sendPosUpdate()
 
 #GET        /game/:player1/:player2/:map     controllers.TankController.setGame(player1, player2, map)
+
+GET         /Tank/*file                      controllers.Assets.at(path="/public/TankFrontend", file)
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                    controllers.Assets.versioned(path="/public", file: Asset)

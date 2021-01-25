@@ -2,30 +2,25 @@ package controllers
 
 import java.io.File
 
-import akka.actor.TypedActor.dispatcher
-import akka.actor.{Actor, ActorRef}
-import com.google.inject.{Guice, Inject}
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, WebSocket}
-import javax.inject.Singleton
-import play.api.libs.streams.ActorFlow
-import play.twirl.api.HtmlFormat
-import de.htwg.se.Tank.model.fileIoComponent.fileIoJsonImpl.FileIO
-import de.htwg.se.Tank.model.playerComponent.playerBase.{Player, Position}
-
-import scala.swing.Reactor
-import akka.actor.{ActorRefFactory, ActorSystem}
+import akka.actor.{ ActorSystem, _ }
 import akka.stream.Materializer
-import akka.actor._
+import com.google.inject.{ Guice, Inject }
 import de.htwg.se.Tank.TankModule
-import de.htwg.se.Tank.controller.controllerComponent.{ControllerInterface, Fire, Hit, NewGame, UpdateMap}
+import de.htwg.se.Tank.controller.controllerComponent._
+import de.htwg.se.Tank.model.fileIoComponent.fileIoJsonImpl.FileIO
 import de.htwg.se.Tank.model.gameComponent.gameBase.Map
-import play.api.Play.materializer
-import play.api.libs.json.{JsValue, Json}
+import de.htwg.se.Tank.model.playerComponent.playerBase.Position
+import javax.inject.Singleton
+import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.streams.ActorFlow
+import play.api.mvc.{ AnyContent, Request, WebSocket }
 
 import scala.collection.mutable.ListBuffer
+import scala.concurrent.ExecutionContext
+import scala.swing.Reactor
 
 @Singleton
-class TankController @Inject()(cc: ControllerComponents)(implicit System: ActorSystem, mat:Materializer) extends AbstractController(cc) {
+class TankController @Inject() (scc: SilhouetteControllerComponents)(implicit system: ActorSystem, mat: Materializer, ex: ExecutionContext) extends SilhouetteController(scc) {
   final val WIDTH: Double = 1000
   final val HEIGHT: Double = 600
   final val XScale: Double = WIDTH / Map.endOfMap._1
@@ -42,7 +37,7 @@ class TankController @Inject()(cc: ControllerComponents)(implicit System: ActorS
   var mapcoordinates = getScale(d).toBuffer
   var posupdate = getPos(Map.p1.pos)
 
-  def getScale(d:List[(Double, Double)]): List[Double] = {
+  def getScale(d: List[(Double, Double)]): List[Double] = {
     var l: ListBuffer[Double] = ListBuffer.empty
     d.foreach(d => l.append(d._1 * XScale, (Map.endOfMap._2 - d._2) * YScale))
     l.toList
@@ -52,49 +47,42 @@ class TankController @Inject()(cc: ControllerComponents)(implicit System: ActorS
     (value.x * XScale, (Map.endOfMap._2 - value.y) * YScale)
   }
 
-  def setParameter = {
+  def setParameter() {
     var player1 = Map.getPlayer(1)
     var player2 = Map.getPlayer(2)
     player1.pos = Position(240, 350)
     player2.pos = Position(1100, 350)
   }
 
-  def startGame(): Unit = {
-    gamecontroller.setGame("", 0, "small", "Sascha", "Yue")
-    gamecontroller.publish(new NewGame)
-    Map.activePlayer = Map.p1
-  }
-
-  def menu = Action {
+  def menu = silhouette.SecuredAction { implicit request: Request[AnyContent] =>
     try {
-      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TrailRunnerFrontend/index.html"), inline = true)
+      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
-  def about = Action {
+  def about = silhouette.SecuredAction { implicit request: Request[AnyContent] =>
     try {
-      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TrailRunnerFrontend/index.html"), inline = true)
+      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
-  def controls = Action {
+  def controls = silhouette.SecuredAction { implicit request: Request[AnyContent] =>
     try {
-      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TrailRunnerFrontend/index.html"), inline = true)
+      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
-  def tank = Action {
-    //startGame()
+  def tank = silhouette.SecuredAction { implicit request: Request[AnyContent] =>
     try {
-      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TrailRunnerFrontend/index.html"), inline = true)
+      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
@@ -119,74 +107,82 @@ class TankController @Inject()(cc: ControllerComponents)(implicit System: ActorS
       game.changePlayer()
     Ok(fileIO.gameToJson(game))
   }
-  /**
+
   def shoot = Action {
     gamecontroller.shoot(5)
-    Ok(views.html.tank(gamecontroller))
+    try {
+      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+    } catch {
+      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+    }
   }
 
   def moveAngleUp = Action {
     gamecontroller.moveAngleUp()
-    Ok(views.html.tank(gamecontroller))
+    try {
+      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+    } catch {
+      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+    }
   }
 
   def moveAngleDown = Action {
     gamecontroller.moveAngleUp()
-    Ok(views.html.tank(gamecontroller))
+    try {
+      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+    } catch {
+      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+    }
   }
-*/
+
   def changePlayer = Action {
     gamecontroller.changePlayer()
     try {
-      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TrailRunnerFrontend/index.html"), inline = true)
+      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def redo = Action {
     gamecontroller.redo
     try {
-      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TrailRunnerFrontend/index.html"), inline = true)
+      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def undo = Action {
     gamecontroller.undo
     try {
-      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TrailRunnerFrontend/index.html"), inline = true)
+      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def PowerPlus = Action {
     gamecontroller.powerUp()
     try {
-      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TrailRunnerFrontend/index.html"), inline = true)
+      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def PowerMinus = Action {
     gamecontroller.powerDown()
     try {
-      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TrailRunnerFrontend/index.html"), inline = true)
+      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def gameToJson() = Action {
     gamecontroller.save
-    try {
-      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
-    } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TrailRunnerFrontend/index.html"), inline = true)
-    }
+    Ok(fileIO.gameToJson(game))
   }
 
   def socket = WebSocket.accept[JsValue, JsValue] { request =>
@@ -201,7 +197,7 @@ class TankController @Inject()(cc: ControllerComponents)(implicit System: ActorS
     }
   }
 
-  class TankWebSocketActor(out:ActorRef) extends Actor with Reactor {
+  class TankWebSocketActor(out: ActorRef) extends Actor with Reactor {
     listenTo(gamecontroller)
     override def receive = {
       case msg: String =>
@@ -217,7 +213,7 @@ class TankController @Inject()(cc: ControllerComponents)(implicit System: ActorS
       case event: Hit => sendJsonToClient
     }
 
-    def sendJsonToClient = {
+    def sendJsonToClient() {
       out ! fileIO.gameToJson(game)
     }
   }
