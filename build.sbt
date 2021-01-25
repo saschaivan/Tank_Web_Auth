@@ -35,7 +35,7 @@ libraryDependencies ++= Seq(
   filters
 )
 
-
+/**
 lazy val TankBase = ProjectRef(uri("git://github.com/saschaivan/Tank.git#master"), "tankBase")
 
 lazy val root = (project in file("."))
@@ -57,6 +57,28 @@ lazy val root = (project in file("."))
     "-Xfatal-warnings"
   )
 )
+*/
+lazy val `tank_web` = (project in file(".")).enablePlugins(PlayScala)
+
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala).settings(
+  name := """Tank_Web_Auth""",
+  version := "1.0-SNAPSHOT",
+  scalaVersion := "2.12.4",
+  libraryDependencies ++= Seq(
+    guice,
+    "com.h2database" % "h2" % "1.4.199",
+    "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test,
+    "de.htwg.se" %% "tank" % "0.0.1"
+  ),
+  scalacOptions ++= Seq(
+    "-feature",
+    "-deprecation",
+    "-Xfatal-warnings"
+  )
+)
+
+
 
 routesImport += "utils.route.Binders._"
 
