@@ -35,7 +35,6 @@ libraryDependencies ++= Seq(
   filters
 )
 
-lazy val `tank_web_auth` = (project in file(".")).enablePlugins(PlayScala)
 
 lazy val TankBase = ProjectRef(uri("git://github.com/saschaivan/Tank.git#master"), "tankBase")
 
