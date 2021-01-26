@@ -1,19 +1,20 @@
 package controllers
 
 import java.io.File
+import java.nio.file.NoSuchFileException
 
-import akka.actor.{ ActorSystem, _ }
+import akka.actor.{ActorSystem, _}
 import akka.stream.Materializer
-import com.google.inject.{ Guice, Inject }
+import com.google.inject.{Guice, Inject}
 import de.htwg.se.Tank.TankModule
 import de.htwg.se.Tank.controller.controllerComponent._
 import de.htwg.se.Tank.model.fileIoComponent.fileIoJsonImpl.FileIO
 import de.htwg.se.Tank.model.gameComponent.gameBase.Map
 import de.htwg.se.Tank.model.playerComponent.playerBase.Position
 import javax.inject.Singleton
-import play.api.libs.json.{ JsValue, Json }
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.streams.ActorFlow
-import play.api.mvc.{ AnyContent, Request, WebSocket }
+import play.api.mvc.{AnyContent, Request, WebSocket}
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext
@@ -56,33 +57,33 @@ class TankController @Inject() (scc: SilhouetteControllerComponents)(implicit sy
 
   def menu = silhouette.SecuredAction { implicit request: Request[AnyContent] =>
     try {
-      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+      case e: NoSuchFileException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def about = silhouette.SecuredAction { implicit request: Request[AnyContent] =>
     try {
-      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+      case e: NoSuchFileException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def controls = silhouette.SecuredAction { implicit request: Request[AnyContent] =>
     try {
-      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+      case e: NoSuchFileException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def tank = silhouette.SecuredAction { implicit request: Request[AnyContent] =>
     try {
-      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+      case e: NoSuchFileException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
@@ -111,72 +112,72 @@ class TankController @Inject() (scc: SilhouetteControllerComponents)(implicit sy
   def shoot = Action {
     gamecontroller.shoot(5)
     try {
-      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+      case e: NoSuchFileException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def moveAngleUp = Action {
     gamecontroller.moveAngleUp()
     try {
-      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+      case e: NoSuchFileException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def moveAngleDown = Action {
     gamecontroller.moveAngleUp()
     try {
-      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+      case e: NoSuchFileException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def changePlayer = Action {
     gamecontroller.changePlayer()
     try {
-      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+      case e: NoSuchFileException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def redo = Action {
     gamecontroller.redo
     try {
-      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+      case e: NoSuchFileException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def undo = Action {
     gamecontroller.undo
     try {
-      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+      case e: NoSuchFileException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def PowerPlus = Action {
     gamecontroller.powerUp()
     try {
-      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+      case e: NoSuchFileException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
   def PowerMinus = Action {
     gamecontroller.powerDown()
     try {
-      Ok.sendFile(new File("public/TankFrontend/index.html"), inline = true)
+      Ok.sendFile(new File("/app/public/TankFrontend/index.html"), inline = true)
     } catch {
-      case e: NoSuchFieldException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
+      case e: NoSuchFileException => Ok.sendFile(new File("./public/TankFrontend/index.html"), inline = true)
     }
   }
 
