@@ -3,18 +3,18 @@ package controllers
 import java.io.File
 import java.nio.file.NoSuchFileException
 
-import akka.actor.{ActorSystem, _}
+import akka.actor.{ ActorSystem, _ }
 import akka.stream.Materializer
-import com.google.inject.{Guice, Inject}
+import com.google.inject.{ Guice, Inject }
 import de.htwg.se.Tank.TankModule
 import de.htwg.se.Tank.controller.controllerComponent._
 import de.htwg.se.Tank.model.fileIoComponent.fileIoJsonImpl.FileIO
 import de.htwg.se.Tank.model.gameComponent.gameBase.Map
 import de.htwg.se.Tank.model.playerComponent.playerBase.Position
 import javax.inject.Singleton
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import play.api.libs.streams.ActorFlow
-import play.api.mvc.{AnyContent, Request, WebSocket}
+import play.api.mvc.{ AnyContent, Request, WebSocket }
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext
